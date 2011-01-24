@@ -16,6 +16,8 @@ if "%~1"=="-H" goto help
 if "%~1"=="/h" goto help
 chcp 1252
 
+set version=2_01
+
 rem --------------------------------------------------------------------
 rem execution directory from which cmd is called
 rem --------------------------------------------------------------------
@@ -31,7 +33,7 @@ set distlist=%execdir%\mtbin.lst
 rem --------------------------------------------------------------------
 rem target file
 rem --------------------------------------------------------------------
-set zipfile=%execdir%\mtbin.zip
+set zipfile=%execdir%\mtbin_%version%.zip
 del "%zipfile%"
 
 rem --------------------------------------------------------------------
