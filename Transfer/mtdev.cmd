@@ -16,6 +16,8 @@ if "%~1"=="-H" goto help
 if "%~1"=="/h" goto help
 chcp 1252
 
+set version=2_01
+
 rem --------------------------------------------------------------------
 rem execution directory from which cmd is called
 rem --------------------------------------------------------------------
@@ -31,18 +33,18 @@ set distlist=%execdir%\mtdev.lst
 rem --------------------------------------------------------------------
 rem target file
 rem --------------------------------------------------------------------
-set zipfile=%execdir%\mtdev.zip
+set zipfile=%execdir%\mtdev_%version%.zip
 del "%zipfile%"
 
 rem --------------------------------------------------------------------
-rem change to directory above execdir
+rem change to directory above MsgText
 rem --------------------------------------------------------------------
-cd "%execdir%\.."
+cd "%execdir%\..\.."
 
 rem --------------------------------------------------------------------
 rem prepare distribution
 rem --------------------------------------------------------------------
-copy /b/y Release\MsgText.exe MsgText\bin\MsgText.exe
+copy /b/y MsgText\Release\MsgText.exe MsgText\bin\MsgText.exe
 pkzipc -add -attr=all -dir=current "%zipfile%" "@%distlist%"
 cd "%execdir%"
 @echo Source zipped
