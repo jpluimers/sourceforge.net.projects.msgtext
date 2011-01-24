@@ -35,14 +35,15 @@ set zipfile=%execdir%\mtbin.zip
 del "%zipfile%"
 
 rem --------------------------------------------------------------------
-rem change to directory above execdir
+rem change to directory above MsgText
 rem --------------------------------------------------------------------
-cd "%execdir%\.."
+cd "%execdir%\..\.."
 
 rem --------------------------------------------------------------------
 rem prepare distribution
 rem --------------------------------------------------------------------
-copy /b/y Release\MsgText.exe MsgText\bin\MsgText.exe
+copy /b/y MsgText\Release\MsgText.exe MsgText\bin\MsgText.exe
+@echo pkzipc -add -attr=all -dir=current "%zipfile%" "@%distlist%"
 pkzipc -add -attr=all -dir=current "%zipfile%" "@%distlist%"
 cd "%execdir%"
 @echo Distribution zipped
