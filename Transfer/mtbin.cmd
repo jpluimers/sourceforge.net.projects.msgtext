@@ -37,7 +37,7 @@ set zipfile=%execdir%\mtbin_%version%.zip
 del "%zipfile%"
 
 rem --------------------------------------------------------------------
-rem change to directory above MsgText
+rem change to directory above msgtext
 rem --------------------------------------------------------------------
 cd "%execdir%\..\.."
 
