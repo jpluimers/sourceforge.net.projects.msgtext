@@ -565,14 +565,14 @@ char* Property::value()
   case PT_OBJECT: break;
   case PT_STRING8: 
     p = getString8Value();
-    strncpy(acValue,p,sizeof(acValue)-1); 
+    strncpy(acValue,p,sizeof(acValue)); 
     free(p); 
     break;
   case PT_UNICODE: 
     pwc = getUnicodeValue(); 
     p = newMultiByte(pwc); 
     free(pwc); 
-    strncpy(acValue,p,sizeof(acValue)-1); 
+    strncpy(acValue,p,sizeof(acValue)); 
     free(p); 
     break;
   case PT_SYSTIME: sprintf(acValue,"0x%016x",(LPBYTE)&getSysTimeValue()); break;
@@ -709,13 +709,26 @@ FILETIME Property::getSysTimeValue()
 /*--------------------------------------------------------------------*/
 char* Property::getString8Value()
 {
-  return (char*)getBinaryValue();
+  ULONG ulSize = getBinarySize();
+  LPBYTE pBuffer = getBinaryValue();
+  char* pString8Value = (char*)malloc(ulSize+sizeof(char));
+  memcpy(pString8Value,pBuffer,ulSize);
+  free(pBuffer);
+  pString8Value[ulSize] = '\0';
+  return pString8Value;
 } /* getString8Value */
 
 /*--------------------------------------------------------------------*/
 LPOLESTR Property::getUnicodeValue()
 {
-  return (LPOLESTR)getBinaryValue();
+  ULONG ulSize = getBinarySize();
+  LPBYTE pBuffer = getBinaryValue();
+  LPOLESTR pUnicodeValue = (LPOLESTR)malloc(ulSize+sizeof(wchar_t));
+  memcpy(pUnicodeValue,pBuffer,ulSize);
+  free(pBuffer);
+  ulSize = ulSize / sizeof(wchar_t);
+  pUnicodeValue[ulSize] = L'\0';
+  return pUnicodeValue;
 } /* getUnicodeValue */
 
 /*--------------------------------------------------------------------*/
@@ -739,6 +752,19 @@ IStream* Property::getBinaryIStream()
 } /* getBinaryIStream */
 
 /*--------------------------------------------------------------------*/
+ULONG Property::getBinarySize()
+{
+  ULONG ulSize;
+  /* make name "__substg1.0_HHHHHHHH" and get its content from Storage */
+  LPOLESTR pwcsStreamName = getSubstgName();
+  Stream* pStream = m_pStorage->getStream(pwcsStreamName);
+  ulSize = pStream->size();
+  free(pwcsStreamName);
+  delete pStream;
+  return ulSize;
+} /* getBinarySize */
+
+/*--------------------------------------------------------------------*/
 LPBYTE Property::getBinaryValue()
 {
   ULONG ulSize;
@@ -746,10 +772,10 @@ LPBYTE Property::getBinaryValue()
   /* make name "__substg1.0_HHHHHHHH" and get its content from Storage */
   LPOLESTR pwcsStreamName = getSubstgName();
   Stream* pStream = m_pStorage->getStream(pwcsStreamName);
-  free(pwcsStreamName);
   ulSize = pStream->size();
   pValue = (LPBYTE)malloc(ulSize);
   pStream->read(ulSize,pValue);
+  free(pwcsStreamName);
   delete pStream;
   return pValue;
 } /* getBinaryValue */

@@ -186,8 +186,15 @@ public:
   Stream* getBinaryStream();
 
   /*--------------------------------------------------------------------
+  getBinarySize
+    returns: size of byte array of Property of type PT_BINARY.
+  heap size invariant.
+  --------------------------------------------------------------------*/
+  ULONG getBinarySize();
+
+  /*--------------------------------------------------------------------
   getBinaryValue
-    returns: pointer to byte array of Propertys of type PT_BINARY.
+    returns: pointer to byte array of Property of type PT_BINARY.
   heap size not invariant: caller must free returned value.
   --------------------------------------------------------------------*/
   LPBYTE getBinaryValue();
