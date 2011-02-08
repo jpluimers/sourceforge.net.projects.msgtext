@@ -757,30 +757,34 @@ BOOL Msg::save(BOOL bListFiles, char* pFilename, char* pAttachmentDir)
         Attachment* pAttachment = getAttachment(getAttachmentName(iAttachment));
         char* pAttachmentFilename = pAttachment->getFilename();
         char* pAttachmentName = pfsAttachFolder->newFile(pAttachmentFilename);
+        Fs* pfsAttachment = new Fs(pAttachmentName);
+        if (pfsAttachment->exists())
+        {
+          char* pExtension = pfsAttachment->extension();
+          pAttachmentFilename[strlen(pAttachmentFilename)-strlen(pExtension)] = '\0';
+          /* disambîguate */
+          pAttachmentName = pfsAttachFolder->newFile(pAttachmentFilename,MAX_PATH,pExtension);
+          free(pExtension);
+          pfsAttachment = new Fs(pAttachmentName);
+        }
+        printf("%s\n",pAttachmentName);
         free(pAttachmentFilename);
         if (pAttachment->isEmbeddedMsg())
         {
-          char* pExtension = _strdup(".msg");
-          Fs* pfsAttachment = new Fs(pAttachmentName);
-          char* pMsgName = pfsAttachment->deriveFile(".msg");
-          delete pfsAttachment;
-          free(pExtension);
-          printf("%s\n",pMsgName);
           if (!bListFiles)
           {
-            HRESULT hr = saveEmbeddedMsg(pAttachment,pMsgName);
+            HRESULT hr = saveEmbeddedMsg(pAttachment,pAttachmentName);
             if (FAILED(hr))
               bSucceeded = false;
           }
-          free(pMsgName);
         }
         else
         {
-          printf("%s\n",pAttachmentName);
           if (!bListFiles)
             bSucceeded = pAttachment->save(pAttachmentName);
         }
         free(pAttachmentName);
+        delete pfsAttachment;
         delete pAttachment;
       }
       delete pfsAttachFolder;

@@ -1,82 +1,77 @@
-/*-- $Workfile: Storage.h $ --------------------------------------------
-Wrapper for a "Structured Storage" or "Doc" file.
+/*-- $Workfile: Heap.h $ -----------------------------------------------
+Object for heap diagnostics.
 Version    : $Id$
-Application: MSG file archiving
+Application: Windows Utilities
 Platform   : Windows, Extended MAPI
-Description: Storage class wraps a STORAGE object.
+Description: Heap diagnostics.
 ------------------------------------------------------------------------
 Copyright  : Enter AG, Zurich, 2009
+This file is part of MsgText.
+MsgText is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+MsgText is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with MsgText.  If not, see <http://www.gnu.org/licenses/>.
 ----------------------------------------------------------------------*/
-#ifndef STORAGE_H
-#define STORAGE_H
-
-#define STRICT
-#include <mapix.h>
-// {00020D0B-0000-0000-C000-000000000046}
-EXTERN_C DEFINE_OLEGUID(CLSID_MailMessage, 0x00020D0B, 0, 0);
+#ifndef MYHEAP_H
+#define MYHEAP_H
 
 /*======================================================================
-Storage is the STORAGE wrapper
+Heap wraps the heap
 ======================================================================*/
-class Storage
+class Heap
 {
 public:
   /*--------------------------------------------------------------------
-  constructor 
-    pFilename: name of storage file.
+  constructor records initial used bytes
   heap size invariant.
   --------------------------------------------------------------------*/
-  Storage(char* pFilename);
+  Heap();
 
   /*--------------------------------------------------------------------
-  destructor releases STORAGE interface.
+  destructor
   heap size invariant.
   --------------------------------------------------------------------*/
-  ~Storage();
+  ~Heap();
 
   /*--------------------------------------------------------------------
-  getStg
-    returns: pointer to STORAGE interface.
+  isValid 
+    returns: false (0) if heap is inconsistent.
   heap size invariant.
   --------------------------------------------------------------------*/
-  LPSTORAGE getStg();
+  int isValid();
 
   /*--------------------------------------------------------------------
-  create creates an empty storage file and writes the CLSID to it.
-    clsid: CLSID to be stored in storage.
-    returns: 0, if no error occurred.
+  hasInitialSize
+    returns: false (0) if the heap does not have the same size as on 
+             this object's creation.
   heap size invariant.
   --------------------------------------------------------------------*/
-  HRESULT create(GUID clsid);
+  int hasInitialSize();
 
   /*--------------------------------------------------------------------
-  open opens an existing storage file.
-    returns: 0, if no error occurred.
+  minimize minimizes the heap
+    returns: returns 0 if heap is consistent.
   heap size invariant.
   --------------------------------------------------------------------*/
-  HRESULT open();
+  int minimize();
 
   /*--------------------------------------------------------------------
-  matches checks, whether CLSID matches.
-    returns: true, if no error occurred.
+  bytesUsed 
+    returns: number of used bytes or 0xFFFFFFFF if heap is inconsistent.
   heap size invariant.
   --------------------------------------------------------------------*/
-  BOOL matches(GUID clsid);
-
-  /*--------------------------------------------------------------------
-  commit commits the changes.
-    returns: 0, if no error occurred.
-  heap size invariant.
-  --------------------------------------------------------------------*/
-  HRESULT commit();
+  size_t bytesUsed();
 
 private:
-  /* name of storage file */
-  char* m_pName;
-  /* pointer to STORAGE interface */
-  LPSTORAGE m_pStorage;
+  /* stores the number of used bytes at this object's creation */
+  size_t m_sizeInitialUsed;
+}; /* class Heap */
 
-}; /* class Storage */
-
-#endif // STORAGE_H not defined
+#endif // MYHEAP_H not defined
 /*==End of File=======================================================*/

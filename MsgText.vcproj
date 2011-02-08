@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="MsgText"
+	Name="msgtext"
 	ProjectGUID="{63B25C2E-51DB-4856-9067-C4AB3BF99C5F}"
-	RootNamespace="MsgText"
+	RootNamespace="msgtext"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -243,63 +243,67 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\Msg\Attachment.h"
+				RelativePath=".\Msg\Attachment.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Utils\CmdLine.h"
+				RelativePath=".\Utils\CmdLine.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Rtf\CompressedStream.h"
+				RelativePath=".\Rtf\CompressedStream.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Rtf\Crc.h"
+				RelativePath=".\Rtf\Crc.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Rtf\Dictionary.h"
+				RelativePath=".\Rtf\Dictionary.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Utils\FileTime.h"
+				RelativePath=".\Utils\FileTime.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Utils\Fs.h"
+				RelativePath=".\Utils\Fs.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Utils\Heap.h"
+				RelativePath=".\Utils\Heap.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Rtf\HtmlWriter.h"
+				RelativePath=".\Rtf\HtmlWriter.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Msg\Msg.h"
+				RelativePath=".\Msg\Msg.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Msg\Property.h"
+				RelativePath=".\Msg\Property.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Msg\PropStorage.h"
+				RelativePath=".\Msg\PropStorage.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Msg\Recipient.h"
+				RelativePath=".\Mapi\PropValue.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Storage\Storage.h"
+				RelativePath=".\Msg\Recipient.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Storage\Stream.h"
+				RelativePath=".\Storage\Storage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Storage\Stream.h"
 				>
 			</File>
 		</Filter>
@@ -315,10 +319,6 @@
 		</File>
 		<File
 			RelativePath=".\bin\mttest.js"
-			>
-		</File>
-		<File
-			RelativePath=".\readme.html"
 			>
 		</File>
 		<File
