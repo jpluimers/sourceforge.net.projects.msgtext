@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MsgText", "MsgText.vcproj", "{63B25C2E-51DB-4856-9067-C4AB3BF99C5F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msgtext", "MsgText.vcproj", "{63B25C2E-51DB-4856-9067-C4AB3BF99C5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transfer", "Transfer", "{1A256DDE-195C-422B-A1DC-C4E4CFB75E1C}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,6 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transfer", "Transfer", "{1A
 		Transfer\mtbin.lst = Transfer\mtbin.lst
 		Transfer\mtdev.cmd = Transfer\mtdev.cmd
 		Transfer\mtdev.lst = Transfer\mtdev.lst
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2BDE329D-116E-4B9E-81F0-9BE884A56A1D}"
+	ProjectSection(SolutionItems) = preProject
+		readme.html = readme.html
 	EndProjectSection
 EndProject
 Global
