@@ -16,7 +16,7 @@ if "%~1"=="-H" goto help
 if "%~1"=="/h" goto help
 chcp 1252
 
-set version=2_04
+set version=2_05
 
 rem --------------------------------------------------------------------
 rem execution directory from which cmd is called
