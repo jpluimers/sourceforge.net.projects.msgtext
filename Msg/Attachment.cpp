@@ -123,12 +123,10 @@ char* Attachment::getFilename()
           (*pSrc != ':') && (*pSrc != '*') &&  (*pSrc != '?') &&
           (*pSrc != '\\') && (*pSrc != '/') && (*pSrc != '"') &&
           (*pSrc != '<') && (*pSrc != '>') && (*pSrc != '|'))
-      {
         *pDest = *pSrc;
-        pDest++;
-      }
       else
         *pDest = ' ';
+      pDest++;
     }
     *pDest = '\0';
     printf("Attachment file name: %s\n",pFilename);
