@@ -114,18 +114,21 @@ char* Attachment::getFilename()
       // printf("--- Filename with extension: %s\n",pFilename);
       free(pExtension);
     }
-    /* remove invalid characters: ':*?\/"<>|' */
+    /* replace invalid characters: special characters and ':*?\/"<>|' by spaces */
     char* pSrc;
     char* pDest = pFilename;
-    for (pSrc = pFilename; (pSrc != NULL) && (*pSrc >= ' '); pSrc++)
+    for (pSrc = pFilename; (pSrc != NULL) && (*pSrc != '\0'); pSrc++)
     {
-      if ((*pSrc != ':') && (*pSrc != '*') &&  (*pSrc != '?') &&
+      if ((*pSrc >= ' ') &&
+          (*pSrc != ':') && (*pSrc != '*') &&  (*pSrc != '?') &&
           (*pSrc != '\\') && (*pSrc != '/') && (*pSrc != '"') &&
           (*pSrc != '<') && (*pSrc != '>') && (*pSrc != '|'))
       {
         *pDest = *pSrc;
         pDest++;
       }
+      else
+        *pDest = ' ';
     }
     *pDest = '\0';
     printf("Attachment file name: %s\n",pFilename);
