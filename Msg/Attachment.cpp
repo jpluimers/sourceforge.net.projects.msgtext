@@ -89,49 +89,49 @@ char* Attachment::getFilename()
         // printf("--- DisplayName without size: %s\n",pName);
       }
       else
+      {
+        pName = _strdup("No name");
         printf("No name!");
+      }
     }
     //else
     //  printf("--- AttachFilename: %s\n",pName);
   }
   //else
   //  printf("--- AttachLongFilename: %s\n",pName);
-  if ((pName != NULL) && (*pName != '\0'))
-  {
-    pFilename = trim(pName);
-    // printf("--- Trimmed file name: %s\n",pFilename);
-    /* append extension */
-    char* pExtension = NULL;
-    if (getMethod() == ATTACH_EMBEDDED_MSG)
-      pExtension = _strdup(".msg");
-    else
-      pExtension = getStringValue(PR_ATTACH_EXTENSION);
-    if ((pExtension != NULL) && (*pExtension != '\0'))
-    {
-      // printf("--- Extension: %s\n",pExtension);
-      pFilename = (char*)realloc(pFilename, strlen(pFilename)+strlen(pExtension)+1);
-      strcat(pFilename,pExtension);
-      // printf("--- Filename with extension: %s\n",pFilename);
-      free(pExtension);
-    }
-    /* replace invalid characters: special characters and ':*?\/"<>|' by spaces */
-    char* pSrc;
-    char* pDest = pFilename;
-    for (pSrc = pFilename; (pSrc != NULL) && (*pSrc != '\0'); pSrc++)
-    {
-      if ((*pSrc >= ' ') &&
-          (*pSrc != ':') && (*pSrc != '*') &&  (*pSrc != '?') &&
-          (*pSrc != '\\') && (*pSrc != '/') && (*pSrc != '"') &&
-          (*pSrc != '<') && (*pSrc != '>') && (*pSrc != '|'))
-        *pDest = *pSrc;
-      else
-        *pDest = ' ';
-      pDest++;
-    }
-    *pDest = '\0';
-    printf("Attachment file name: %s\n",pFilename);
-  }
+  pFilename = trim(pName);
   free(pName);
+  // printf("--- Trimmed file name: %s\n",pFilename);
+  /* append extension */
+  char* pExtension = NULL;
+  if (getMethod() == ATTACH_EMBEDDED_MSG)
+    pExtension = _strdup(".msg");
+  else
+    pExtension = getStringValue(PR_ATTACH_EXTENSION);
+  if ((pExtension != NULL) && (*pExtension != '\0'))
+  {
+    // printf("--- Extension: %s\n",pExtension);
+    pFilename = (char*)realloc(pFilename, strlen(pFilename)+strlen(pExtension)+1);
+    strcat(pFilename,pExtension);
+    // printf("--- Filename with extension: %s\n",pFilename);
+    free(pExtension);
+  }
+  /* replace invalid characters: special characters and ':*?\/"<>|' by spaces */
+  char* pSrc;
+  char* pDest = pFilename;
+  for (pSrc = pFilename; (pSrc != NULL) && (*pSrc != '\0'); pSrc++)
+  {
+    if (((unsigned char)*pSrc >= ' ') &&
+        (*pSrc != ':') && (*pSrc != '*') &&  (*pSrc != '?') &&
+        (*pSrc != '\\') && (*pSrc != '/') && (*pSrc != '"') &&
+        (*pSrc != '<') && (*pSrc != '>') && (*pSrc != '|'))
+      *pDest = *pSrc;
+    else
+      *pDest = ' ';
+    pDest++;
+  }
+  *pDest = '\0';
+  printf("Attachment file name: %s\n",pFilename);
   return pFilename;
 } /* getFilename */
 

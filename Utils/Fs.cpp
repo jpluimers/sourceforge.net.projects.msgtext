@@ -58,14 +58,14 @@ char* trim(char* ps)
   char* p;
   if (ps != NULL)
   {
-    for (p = ps; isspace(*p); p++) {}
+    for (p = ps; isspace((unsigned char)*p); p++) {}
     pt = _strdup(p);
-    if ((pt != NULL) && (*pt != '\0'))
+    if ((pt != NULL))
     {
       for (p = pt + strlen(pt); (p != pt) && (*p == '\0');)
       {
         p--;
-        if (isspace(*p))
+        if (isspace((unsigned char)*p))
           *p = '\0';
       }
     }
@@ -286,9 +286,7 @@ char* Fs::normalize()
     for (size_t i = 0; i < strlen(m_pName); i++)
     {
       /* C++ has these stupid signed characters ... */
-      int iCode = m_pName[i];
-      if (iCode < 0)
-        iCode += 256;
+      int iCode = (unsigned char)m_pName[i];
       strcpy(p,apXlat[iCode]);
       p += strlen(apXlat[iCode]);
     }
