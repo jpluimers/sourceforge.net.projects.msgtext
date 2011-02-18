@@ -420,11 +420,13 @@ char* Fs::deriveFile(char* pExtension)
     u = 0;
     if (pExtension != NULL)
       u = strlen(pExtension);
-    pDerivedFile = (char*)malloc(strlen(pName)+u+1);
-    strcpy(pDerivedFile,pName);
+    char* pTrimmed = trim(pName);
+    free(pName);
+    pDerivedFile = (char*)malloc(strlen(pTrimmed)+u+1);
+    strcpy(pDerivedFile,pTrimmed);
     if (pExtension != NULL)
       strcat(pDerivedFile,pExtension);
-    free(pName);
+    free(pTrimmed);
   }
   return pDerivedFile;
 } /* deriveFile */

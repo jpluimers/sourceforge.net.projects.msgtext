@@ -28,7 +28,7 @@ along with MsgText.  If not, see <http://www.gnu.org/licenses/>.
 #include "CompressedStream.h"
 
 #define COMPRESSED 0x75465A4C
-#define UNCOMPRESSED 0x414C544D
+#define UNCOMPRESSED 0x414C454D
 
 /*--------------------------------------------------------------------*/
 void CompressedStream::initialize()
@@ -195,17 +195,17 @@ ULONG CompressedStream::read(ULONG ulSize, void* pBuffer)
 BOOL CompressedStream::isCorrupt()
 {
   BOOL bCorrupt = true;
-  /* read padding */
-  for (BYTE b = 0; m_ulCompressedSize > 0; readByte(&b)) {}
   if (isCompressed())
   {
+    /* read padding */
+    for (BYTE b = 0; m_ulCompressedSize > 0; readByte(&b)) {}
     /* check CRC */
     if (m_pCrc->value() == m_ulCrc)
       bCorrupt = false;
   }
   else
   {
-    /* CRC must be 0 and COMPTYPE 0x414C544D */
+    /* CRC must be 0 and COMPTYPE 0x414C454D */
     if ((m_ulCompType == UNCOMPRESSED) && (m_ulCrc == 0))
       bCorrupt = false;
   }
