@@ -65,6 +65,7 @@ Created    : March 4, 2011, Hartwig Thomas
         <include name="*.txt"/>
       </zipfileset>
 	  </zip>
+		<delete file="${dirbin}msgtext.exe"/>
 	</target>
 	
 </project>
