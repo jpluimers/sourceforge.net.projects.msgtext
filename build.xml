@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- $Workfile: build.xml $ ============================================
+ANT build file of MsgText.
+Version    : $Id$
+Application : MsgText
+Description: build file of MsgText. Makes use of
+             - Devenv (MS Visual Studio)
+             - OpenOffice with a SaveAsPDF macro
+               (http://a32.me/2009/10/does-openoffice-sucks/).
+Platform   : ANT
+========================================================================
+Copyright  : Enter AG, Zurich Switzerland, 2011 
+Created    : March 4, 2011, Hartwig Thomas
+==================================================================== -->
+<project basedir="." default="build" name="MsgText">
+  <property name="version" value="2.08"/>
+
+	<property name="openoffice" value="C:/Programme/OpenOffice.org 3/program/soffice.exe"/>
+  <property name="dirdoc" value="documentation/"/>
+  <property name="dirrelease" value="Release/"/>
+  <property name="dirbin" value="bin/"/>
+	<property name="dirbuild" value="Transfer/"/>
+  <property name="fileodt" location="${dirdoc}MsgText.odt"/>
+	
+  <target name="clean">
+	  <echo message="${ant.project.name}: clean"/>
+  	<exec executable="Devenv.exe">
+      <arg line='"MsgText.vcproj" /Clean'/>
+  	</exec>
+  </target>
+
+  <target name="pdf">
+    <echo message="${ant.project.name}: pdf"/>
+    <exec executable="${openoffice}">
+      <arg line='-invisible "macro:///Standard.PrintPdf.SaveAsPDF(${fileodt})"'/>
+    </exec>
+  </target>
+	
+	<target depends="clean" name="build">
+    <echo message="${ant.project.name}: build"/>
+    <exec executable="Devenv.exe">
+      <arg line='"MsgText.vcproj" /Build'/>
+    </exec>
+  </target>
+
+	<target depends="build, pdf" name="zip">
+	  <echo message="${ant.project.name}: zip"/>
+		<copy file="${dirrelease}msgtext.exe" todir="${dirbin}"/>
+		<zip zipfile="${dirbuild}${ant.project.name}-${version}.zip">
+      <!-- Release/* -->
+      <zipfileset dir="." prefix="${ant.project.name}">
+        <include name="${dirbin}mt.js"/>
+        <include name="${dirbin}msgtext.exe"/>
+      </zipfileset>
+      <!-- documentation/* -->
+      <zipfileset dir="${dirdoc}" prefix="${ant.project.name}">
+        <include name="${dirdoc}MsgText.pdf"/>
+      </zipfileset>
+      <!-- ./*.html -->
+      <zipfileset dir="." prefix="${ant.project.name}">
+        <include name="*.html"/>
+      </zipfileset>
+      <!-- ./*.txt -->
+      <zipfileset dir="." prefix="${ant.project.name}">
+        <include name="*.txt"/>
+      </zipfileset>
+	  </zip>
+	</target>
+	
+</project>

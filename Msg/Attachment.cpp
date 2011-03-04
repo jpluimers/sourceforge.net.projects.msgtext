@@ -108,6 +108,14 @@ char* Attachment::getFilename()
     pExtension = _strdup(".msg");
   else
     pExtension = getStringValue(PR_ATTACH_EXTENSION);
+  /* is the extension is already there, do not attach it */
+  if ((pExtension != NULL) && (*pExtension != '\0') &&
+      (strlen(pFilename) > strlen(pExtension)) && 
+      (strcmp(&pFilename[strlen(pFilename)-strlen(pExtension)],pExtension) == 0))
+  {
+    free(pExtension);
+    pExtension = NULL;
+  }
   if ((pExtension != NULL) && (*pExtension != '\0'))
   {
     // printf("--- Extension: %s\n",pExtension);

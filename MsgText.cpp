@@ -40,7 +40,7 @@ static int iRESULT_WARN = 4;
 static int iRESULT_ERROR = 8;
 static int iRESULT_SEVERE = 12;
 
-#define PROGRAM "MsgText 2.07" /* 1.x was the C# version */ 
+#define PROGRAM "MsgText 2.08" /* 1.x was the C# version */ 
 #define BANNER "Convert .msg files to .txt files and attachments"
 #define COPYRIGHT "(c) 2009, 2010 Enter AG, Zurich, Switzerland\n\
 This program comes with ABSOLUTELY NO WARRANTY; It is free software,\n\
