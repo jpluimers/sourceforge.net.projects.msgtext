@@ -9,7 +9,7 @@ Description: This user interface frontend is used for converting .msg
 Copyright  : 2009, Enter AG, Zurich, Switzerland
 Developed  : Hartwig Thomas, 11. June 2009
 =======================================================================*/
-var g_sBanner = "mt 1.0: convert .msg files to .txt files\r\n" +
+var g_sBanner = "mt 1.01: convert .msg files to .txt files\r\n" +
   "(c) 2009, Enter AG, Zurich, Switzerland";
 
 var g_fso = WScript.CreateObject("Scripting.FileSystemObject");
@@ -43,7 +43,7 @@ function initParms()
   g_sMsgFile = "";
   g_sTextFile = "";
   g_sAttachmentDir = "";
-} /* initParms */
+};  /* initParms */
 
 /*-----------------------------------------------------------------------
 display the form
@@ -77,6 +77,7 @@ function displayForm(ie)
   g_ie.document.writeln("    <p>You may then change the name of the output .txt file and the attachment directory proposed.</p>");
   g_ie.document.writeln("    <hr>");
   g_ie.document.writeln("    <form name=\"mtform\">");
+  g_ie.document.writeln("      <p><input type=\"file\" name=\"selector\" id=\"selector\" style=\"display:none\" /></p>");
   g_ie.document.writeln("      <table>");
   g_ie.document.writeln("        <tr>");
   g_ie.document.writeln("          <td align=\"right\">.msg file</td>");
@@ -116,7 +117,7 @@ function displayForm(ie)
   g_ie.Width = 750;
   g_ie.Height = 500;
   g_ie.document.getElementById("msg").focus();
-} /* displayForm */
+};  /* displayForm */
 
 /*----------------------------------------------------------------------
 onCancelPressed is the event handler for the cancel button
@@ -125,7 +126,7 @@ function onCancelPressed()
 {
   g_bLaunch = false;
   g_bFinished = true;
-} /* onCancelPressed */
+};  /* onCancelPressed */
 
 /*----------------------------------------------------------------------
 onOkPressed is the event handler for the OK button
@@ -144,7 +145,7 @@ function onOkPressed()
   else
     sMessage = "Please enter .msg file!";
   g_ie.document.getElementById("message").value = sMessage;
-} /* onOkPressed */
+};  /* onOkPressed */
 
 /*----------------------------------------------------------------------
 onMsgPressed is the event handler for the msg button
@@ -152,57 +153,17 @@ onMsgPressed is the event handler for the msg button
 function onMsgPressed()
 {
   /* display file selector */
-  var dlgOpen = WScript.CreateObject("SAFRCFileDlg.FileOpen");
-  if (g_sMsgFile)
-    dlgOpen.FileName = g_sMsgFile;
-  else
-    dlgOpen.FileName = g_wsh.SpecialFolders("MyDocuments") + "\\*.*";
-  // We use SAFRCFileDlg.FileOpen instead of UserAccounts because the last path will
-  // be remembered for Open as well as for Save.
-  var iReturn = dlgOpen.OpenFileOpenDlg();
-  if (iReturn != 0)
+  var selector = g_ie.document.getElementById("selector");
+  selector.click();
+  g_sMsgFile = selector.value;
+  g_ie.document.getElementById("msg").value = g_sMsgFile;
+  if (!g_sTextFile)
   {
-    g_sMsgFile = dlgOpen.FileName;
-    g_ie.document.getElementById("msg").value = g_sMsgFile;
-    if (!g_sTextFile)
-    {
-      var sExtension = g_fso.GetExtensionName(g_sMsgFile);
-      if (sExtension)
-        g_sTextFile = g_sMsgFile.substring(0, g_sMsgFile.length - sExtension.length) + "txt";
-      else
-        g_sTextFile = g_sMsgFile + ".txt";
-      g_ie.document.getElementById("txt").value = g_sTextFile;
-      if ((!g_sAttachmentDir) || g_bAttachmentFromText)
-      {
-        var sExtension = g_fso.GetExtensionName(g_sTextFile);
-        if (sExtension)
-          g_sAttachmentDir = g_sTextFile.substring(0, g_sTextFile.length - sExtension.length - 1) + "\\";
-        else
-          g_sAttachmentDir = g_sTextFile + "_\\";
-        g_bAttachmentFromText = true;
-        g_ie.document.getElementById("att").value = g_sAttachmentDir;
-      }
-    }
-  }
-} /* onMsgPressed */
-
-/*----------------------------------------------------------------------
-onTxtPressed is the event handler for the txt button
-----------------------------------------------------------------------*/
-function onTxtPressed()
-{
-  /* display file selector */
-  var dlgSave = WScript.CreateObject("SAFRCFileDlg.FileSave");
-  if (g_sTextFile)
-    dlgSave.FileName = g_sTextFile;
-  dlgSave.FileType = "Text File (*.txt)";
-  var iReturn = dlgSave.OpenFileSaveDlg();
-  if (iReturn != 0)
-  {
-    g_sTextFile = dlgSave.FileName;
-    var sExtension = g_fso.GetExtensionName(g_sTextFile);
-    if (!sExtension)
-      g_sTextFile = g_sTextFile + ".txt";
+    var sExtension = g_fso.GetExtensionName(g_sMsgFile);
+    if (sExtension)
+      g_sTextFile = g_sMsgFile.substring(0, g_sMsgFile.length - sExtension.length) + "txt";
+    else
+      g_sTextFile = g_sMsgFile + ".txt";
     g_ie.document.getElementById("txt").value = g_sTextFile;
     if ((!g_sAttachmentDir) || g_bAttachmentFromText)
     {
@@ -215,7 +176,33 @@ function onTxtPressed()
       g_ie.document.getElementById("att").value = g_sAttachmentDir;
     }
   }
-} /* onTxtPressed */
+};  /* onMsgPressed */
+
+/*----------------------------------------------------------------------
+onTxtPressed is the event handler for the txt button
+----------------------------------------------------------------------*/
+function onTxtPressed()
+{
+  /* display file selector */
+  /* display file selector */
+  var selector = g_ie.document.getElementById("selector");
+  selector.click();
+  g_sTextFile = selector.value;
+  var sExtension = g_fso.GetExtensionName(g_sTextFile);
+  if (!sExtension)
+    g_sTextFile = g_sTextFile + ".txt";
+  g_ie.document.getElementById("txt").value = g_sTextFile;
+  if ((!g_sAttachmentDir) || g_bAttachmentFromText)
+  {
+    var sExtension = g_fso.GetExtensionName(g_sTextFile);
+    if (sExtension)
+      g_sAttachmentDir = g_sTextFile.substring(0, g_sTextFile.length - sExtension.length - 1) + "\\";
+    else
+      g_sAttachmentDir = g_sTextFile + "_\\";
+    g_bAttachmentFromText = true;
+    g_ie.document.getElementById("att").value = g_sAttachmentDir;
+  }
+};  /* onTxtPressed */
 
 /*----------------------------------------------------------------------
 onAttPressed is the event handler for the att button
@@ -233,7 +220,7 @@ function onAttPressed()
     folderAtt = g_fso.GetFolder(g_sAttachmentDir);
     g_sSelectFolder = folderAtt.ParentFolder;
   }
-} /* onAttPressed */
+};  /* onAttPressed */
 
 /*-----------------------------------------------------------------------
 display the form and validate its entry
@@ -252,7 +239,7 @@ function runForm()
   /* wait until ok or cancel button was pressed */
   while (!g_bFinished) { WScript.Sleep(100); }  
   return g_bLaunch;
-} /* runForm */
+};  /* runForm */
 
 /*-----------------------------------------------------------------------
 msgtext runs the command-line executable MsgText
@@ -278,7 +265,41 @@ function msgtext(sMsgFile,sTextFile,sAttachmentDir)
   /* remove the wait cursor */
   g_ie.document.body.style.cursor = curSaved;
   return iReturn;
-} /* msgtext */
+};  /* msgtext */
+
+/*-----------------------------------------------------------------------
+addTrusted adds the site to the trusted sites
+-----------------------------------------------------------------------*/
+var sREGKEY_ABOUT_BLANK = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\Domains\\blank\\about";
+var iTRUSTED_SITES = 2;
+function addTrusted()
+{
+  var bAdded = false;
+  try
+  {
+    var iZone = g_wsh.RegRead(sREGKEY_ABOUT_BLANK);
+    if (iZone != iTRUSTED_SITES)
+      bAdded = true;
+  }
+  catch (e) { bAdded = true; }
+  if (bAdded)
+    g_wsh.RegWrite(sREGKEY_ABOUT_BLANK, iTRUSTED_SITES, "REG_DWORD");
+  return bAdded;
+};  /* addTrusted */
+
+/*-----------------------------------------------------------------------
+removeTrusted removes the site from the trusted sites
+-----------------------------------------------------------------------*/
+function removeTrusted()
+{
+  var bRemoved = true;
+  g_wsh.RegDelete(sREGKEY_ABOUT_BLANK);
+  var sKeyBlank = sREGKEY_ABOUT_BLANK.substring(0,sREGKEY_ABOUT_BLANK.lastIndexOf("\\")+1);
+  /* if about was the only entry under the blank domain, then remove it too. */
+  try { g_wsh.RegDelete(sKeyBlank); }
+  catch (e) { }
+  return bRemoved;
+};  /* removeTrusted */
 
 /*-----------------------------------------------------------------------
 main
@@ -288,6 +309,8 @@ function main()
   var iReturn = iRETURN_WARNING;
   /* get initial values for parameters of MsgText */
   initParms();
+  /* add about:blank to the trusted sites */
+  var bAboutBlankAdded = addTrusted();
   /* start IE */
   g_ie = WScript.CreateObject("InternetExplorer.Application", "IE_");
   if (g_ie)
@@ -302,8 +325,11 @@ function main()
     WScript.Echo("Internet Explorer not found!");
     iReturn = iRETURN_ERROR;
   }
+  /* remove about:blank from the trusted sites */
+  if (bAboutBlankAdded)
+    removeTrusted();
   return iReturn;
-} /* main */
+};  /* main */
 
 /*---------------------------------------------------------------------*/
 try { WScript.quit(main()); }

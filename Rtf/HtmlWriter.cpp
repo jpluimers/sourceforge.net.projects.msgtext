@@ -291,7 +291,7 @@ char* HtmlWriter::replaceUrl(ULONG* pulOffset, char* pText)
         memcpy(pMatch,pFilename,ulFilenameLength);
         pMatch += ulFilenameLength;
         strcpy(pMatch,pEnd);
-        ul = (pMatch - pText) + strlen(pMatch);
+        ul = pMatch - pText;
       }
       else
         ul = pEnd - pText;
@@ -308,8 +308,12 @@ char* HtmlWriter::replaceUrl(ULONG* pulOffset, char* pText)
 /*--------------------------------------------------------------------*/
 char* HtmlWriter::replaceUrls(char* p)
 {
-  for (ULONG ulOffset = 0; ulOffset < strlen(p); )
+  ULONG ulLength = strlen(p);
+  for (ULONG ulOffset = 0; ulOffset < ulLength; )
+  {
     p = replaceUrl(&ulOffset,p);
+    ulLength = strlen(p);
+  }
   return p;
 } /* replaceUrls */
 
@@ -529,7 +533,7 @@ void HtmlWriter::translate()
         if (strcmp(m_pKeyword, "htmltag") == 0)
           translateHtmlTag();
         else if (strcmp(m_pKeyword, "mhtmltag") == 0)
-          m_bHtmlTag = true;
+          m_bHtml = false; // is to be ignored!
         else if (strcmp(m_pKeyword, "htmlrtf") == 0)
         {
           if ((m_pParm != NULL) && (strcmp(m_pParm, "0") == 0))
