@@ -13,32 +13,37 @@ Copyright  : Enter AG, Zurich Switzerland, 2011
 Created    : March 4, 2011, Hartwig Thomas
 ==================================================================== -->
 <project basedir="." default="build" name="MsgText">
-  <property name="version" value="2.08"/>
+  <property name="version" value="2.09"/>
 
-	<property name="openoffice" value="C:/Programme/OpenOffice.org 3/program/soffice.exe"/>
+ 	<property name="libreoffice" value="C:/Programme/LibreOffice 3.5/program/soffice.exe"/>
   <property name="dirdoc" value="documentation/"/>
   <property name="dirrelease" value="Release/"/>
   <property name="dirbin" value="bin/"/>
-	<property name="dirbuild" value="Transfer/"/>
+ 	<property name="dirbuild" value="Transfer/"/>
   <property name="fileodt" location="${dirdoc}MsgText.odt"/>
-	
-  <target name="clean">
+  <property name="devenvexe" value="C:/Programme/Microsoft Visual Studio 10.0/Common7/IDE/Devenv.exe"/>
+
+    <target name="clean">
 	  <echo message="${ant.project.name}: clean"/>
-  	<exec executable="Devenv.exe">
+  	<exec executable="${devenvexe}">
       <arg line='"MsgText.vcproj" /Clean'/>
   	</exec>
   </target>
 
   <target name="pdf">
     <echo message="${ant.project.name}: pdf"/>
-    <exec executable="${openoffice}">
-      <arg line='-invisible "macro:///Standard.PrintPdf.SaveAsPDF(${fileodt})"'/>
+    <exec dir="${dirdoc}" executable="${libreoffice}">
+      <arg value="--headless"/>
+      <arg value="--invisible"/>
+      <arg value="--convert-to"/>
+      <arg value="pdf"/>
+      <arg file="${fileodt}"/>
     </exec>
   </target>
 	
 	<target depends="clean" name="build">
     <echo message="${ant.project.name}: build"/>
-    <exec executable="Devenv.exe">
+    <exec executable="${devenvexe}">
       <arg line='"MsgText.vcproj" /Build'/>
     </exec>
   </target>
