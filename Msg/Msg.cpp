@@ -66,13 +66,26 @@ HRESULT Msg::initialize()
   LPOLESTR awcNAMEID = L"__nameid_version1.0";
   LPOLESTR awcATTACH = L"__attach_version1.0";
   LPOLESTR awcRECIP = L"__recip_version1.0";
+  LPOLESTR awcMSODATASTORE = L"MsoDataStore";
+  LPOLESTR awcProperties = L"Properties";
+  LPOLESTR awcItem = L"Item";
   ULONG ulSTORE_UNICODE_OK = 0x00040000;
   int iStorage;
   LPOLESTR pwcsName;
   LPOLESTR pwcsPrefix;
+  Storage* pStorage;
+  int iStreams;
+  int iStorages;
+  LPOLESTR pwcsMsoName;
+  Storage* pMsoStorage;
+  Stream* pMsoPropertiesStream;
+  LPBYTE pMsoPropertiesContent;
+  Stream* pMsoItemStream;
+  LPBYTE pMsoItemContent;
   Property* pPropStoreSupportMask;
   ULONG ulPropStoreSupportMask;
   HRESULT hr = PropStorage::initialize();
+  HRESULT hrMso = NOERROR;
   if (SUCCEEDED(hr))
   {
     /* lookup PR_STORE_SUPPORT_MASK for UNICODE flag */
@@ -92,6 +105,11 @@ HRESULT Msg::initialize()
         /* named properties are not really needed anywhere ... */
         ;
       }
+      else if (wcscmp(pwcsName,awcMSODATASTORE) == 0)
+      {
+        /* custom XML is not really needed anywhere ... http://msdn.microsoft.com/en-us/library/dd910522(v=office.12).aspx */
+        ;
+      }
       else
       {
         /* if it starts with __attach_version1.0_#HHHHHHHH */
@@ -103,7 +121,8 @@ HRESULT Msg::initialize()
         else
         {
           /* if it starts with __recip_version1.0_#HHHHHHHH */
-          pwcsPrefix[wcslen(awcRECIP)] = L'\0';
+          if (wcslen(pwcsPrefix) > wcslen(awcRECIP))
+            pwcsPrefix[wcslen(awcRECIP)] = L'\0';
           if (wcscmp(pwcsPrefix,awcRECIP) == 0)
             m_iRecipientCount = append((void***)&m_apwcsRecipient,m_iRecipientCount,pwcsName);
           else
